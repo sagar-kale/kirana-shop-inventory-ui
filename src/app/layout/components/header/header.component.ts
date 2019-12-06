@@ -10,8 +10,9 @@ import { TranslateService } from '@ngx-translate/core';
 export class HeaderComponent implements OnInit {
     public pushRightClass: string;
 
-    constructor(private translate: TranslateService, public router: Router) {
+    languages: { lang: string; code: string }[];
 
+    constructor(private translate: TranslateService, public router: Router) {
         this.router.events.subscribe(val => {
             if (
                 val instanceof NavigationEnd &&
@@ -21,6 +22,18 @@ export class HeaderComponent implements OnInit {
                 this.toggleSidebar();
             }
         });
+
+        this.languages = [
+            { lang: 'English', code: 'en' },
+            { lang: 'French', code: 'fr' },
+            { lang: 'Urdu', code: 'ur' },
+            { lang: 'Spanish', code: 'es' },
+            { lang: 'Italian', code: 'it' },
+            { lang: 'Farsi', code: 'fa' },
+            { lang: 'German', code: 'de' },
+            { lang: 'Simplified Chinese', code: 'zh-CHS' },
+            { lang: 'Marathi', code: 'mr' }
+        ];
     }
 
     ngOnInit() {
@@ -47,6 +60,7 @@ export class HeaderComponent implements OnInit {
     }
 
     changeLang(language: string) {
+        sessionStorage.setItem('selectedLang', language);
         this.translate.use(language);
     }
 }
