@@ -1,12 +1,42 @@
 <div class="card mt-3">
     <div class="card-header">Progressbar</div>
     <div class="card-body">
-        <p><ngb-progressbar type="info" [value]="50"></ngb-progressbar></p>
-        <p><ngb-progressbar showValue="true" type="warning" [value]="150" [max]="200"></ngb-progressbar></p>
-        <p><ngb-progressbar type="danger" [value]="100" [striped]="true"></ngb-progressbar></p>
-        <p><ngb-progressbar type="success" [value]="25">25</ngb-progressbar></p>
-        <p><ngb-progressbar type="info" [value]="50">Copying file <b>2 of 4</b>...</ngb-progressbar></p>
-        <p><ngb-progressbar type="warning" [value]="75" [striped]="true" [animated]="true"><i>50%</i></ngb-progressbar></p>
-        <p class="mb-0"><ngb-progressbar type="danger" [value]="100" [striped]="true">Completed!</ngb-progressbar></p>
+        <p>
+            <ngb-progressbar type="info" [value]="50"></ngb-progressbar>
+        </p>
+        <p>
+            <ngb-progressbar showValue="true" type="warning" [value]="150" [max]="200"></ngb-progressbar>
+        </p>
+        <p>
+            <ngb-progressbar type="danger" [value]="100" [striped]="true"></ngb-progressbar>
+        </p>
+        <p>
+            <ngb-progressbar type="success" [value]="25">25</ngb-progressbar>
+        </p>
+        <p>
+            <ngb-progressbar type="info" [value]="50">Copying file <b>2 of 4</b>...</ngb-progressbar>
+        </p>
+        <p>
+            <ngb-progressbar type="warning" [value]="75" [striped]="true" [animated]="true"><i>50%</i></ngb-progressbar>
+        </p>
+        <p>
+            <ngb-progressbar type="danger" [value]="progress" [striped]="true">Completed!</ngb-progressbar>
+        </p>
+        <p><button type="button" class="btn btn-primary" (click)="startProgress()">Start Progress</button></p>
+        <p><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+
+
+            <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+
+            <i class="fa fa-refresh fa-spin fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+
+            <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span></p>
     </div>
 </div>
