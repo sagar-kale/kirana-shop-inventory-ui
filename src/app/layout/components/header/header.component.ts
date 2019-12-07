@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterViewInit {
     public pushRightClass: string;
 
     languages: { lang: string; code: string }[];
+    username: string;
+    subject: Subject<string> = new Subject();
 
     constructor(private translate: TranslateService, public router: Router) {
         this.router.events.subscribe(val => {
@@ -34,10 +38,17 @@ export class HeaderComponent implements OnInit {
             { lang: 'Simplified Chinese', code: 'zh-CHS' },
             { lang: 'Marathi', code: 'mr' }
         ];
+        this.username = localStorage.getItem('username');
     }
 
     ngOnInit() {
         this.pushRightClass = 'push-right';
+    }
+
+    ngAfterViewInit(): void {
+        this.subject
+            .pipe(debounceTime(500), distinctUntilChanged())
+            .subscribe(value => this.onSearch(value));
     }
 
     isToggled(): boolean {
@@ -57,10 +68,16 @@ export class HeaderComponent implements OnInit {
 
     onLoggedout() {
         localStorage.removeItem('isLoggedin');
+        localStorage.removeItem('username');
     }
 
     changeLang(language: string) {
         sessionStorage.setItem('selectedLang', language);
         this.translate.use(language);
+    }
+    onSearch(value: string) {
+        if (value) {
+            console.log(value);
+        }
     }
 }
