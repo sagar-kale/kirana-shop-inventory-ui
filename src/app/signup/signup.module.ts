@@ -5,6 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SignupRoutingModule } from './signup-routing.module';
 import { SignupComponent } from './signup.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         SignupRoutingModule,
         ReactiveFormsModule,
         FormsModule,
-        NgbModule
+        NgbModule,
+        SweetAlert2Module
     ],
     declarations: [SignupComponent]
 })

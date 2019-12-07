@@ -3,6 +3,7 @@ import { routerTransition } from '../router.animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegistrationService } from './registration.service';
 import { User } from './user';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-signup',
@@ -33,8 +34,13 @@ export class SignupComponent implements OnInit {
         this.regService
             .registerUser(this.registerForm.value)
             .subscribe(data => {
-                this.user = data;
-                this.message = `Registration successfull for user name : ${data.email}`;
+                this.user = data.entity;
+                Swal.fire(
+                    'Success',
+                    'Registration successfull for user name : ' +
+                        this.user.email,
+                    'success'
+                );
             });
         this.registerForm.reset();
     }
