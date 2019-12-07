@@ -4,27 +4,48 @@
             <img class="user-avatar" src="assets/images/logo.png" width="150px" />
             <h1>User Registration</h1>
             <!-- <ngb-alert *ngIf="!closed && message" (close)="closed=true" type="success">{{ message }}</ngb-alert> -->
-            <form [formGroup] = "registerForm" (ngSubmit) = "onSubmit()">
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                 <div class="form-content">
                     <div class="form-group">
-                        <input type="text" formControlName="fullName" class="form-control input-underline input-lg" id="" placeholder="{{ 'Full Name' | translate }}">
+                        <input type="text" formControlName="fullName" class="form-control input-underline input-lg"
+                            placeholder="{{ 'Full Name' | translate }}">
+                        <ngb-alert *ngIf="!closed && errors?.fullName" (close)="closed=true" type="warning">
+                            {{ errors.fullName }}</ngb-alert>
                     </div>
 
                     <div class="form-group">
-                        <input type="email" formControlName="email" class="form-control input-underline input-lg" id="" placeholder="{{ 'Email' | translate }}">
+                        <input type="email" formControlName="email" class="form-control input-underline input-lg"
+                            placeholder="{{ 'Email' | translate }}" [ngClass]="{'is-invalid':errors?.email}"
+                            >
+                        <div class="invalid-feedback" *ngIf="errors?.email">
+                            {{errors.email}}
+                        </div>
                     </div>
 
+                    <!-- <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                            <div *ngIf="f.email.errors.required">Email is required</div>
+                            <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+                        </div>
+                    </div> -->
+
                     <div class="form-group">
-                        <input type="password" minlength = "5" formControlName="password" class="form-control input-underline input-lg" id="" placeholder="{{ 'Password' | translate }}">
+                        <input type="password" minlength="5" formControlName="password"
+                            class="form-control input-underline input-lg" placeholder="{{ 'Password' | translate }}">
                     </div>
                     <div class="form-group">
-                        <input type="password" minlength="5" formControlName="repeatPassword" class="form-control input-underline input-lg" id="" placeholder="{{ 'Repeat Password' | translate }}">
+                        <input type="password" minlength="5" formControlName="repeatPassword"
+                            class="form-control input-underline input-lg"
+                            placeholder="{{ 'Repeat Password' | translate }}">
                     </div>
                     <p>
                         Form Status: {{ registerForm.status }}
-                      </p>
+                    </p>
                 </div>
-                <button type="submit" class="btn rounded-btn" [disabled]="!registerForm.valid">{{ 'Register' | translate }}</button>&nbsp;
+                <button type="submit" class="btn rounded-btn"
+                    [disabled]="!registerForm.valid">{{ 'Register' | translate }}</button>&nbsp;
                 <a class="btn rounded-btn" [routerLink]="['/login']">{{ 'Log in' | translate }}</a>
             </form>
         </div>

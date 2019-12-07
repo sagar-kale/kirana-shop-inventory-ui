@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 import { routerTransition } from '../router.animations';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegistrationService } from './registration.service';
 import { User } from './user';
-import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-signup',
@@ -16,13 +16,15 @@ export class SignupComponent implements OnInit {
     user: User;
     message: string;
     closed = false;
+    submitted = false;
+    errors: { fullName: string; email: string; password: string };
     constructor(
         private formBuilder: FormBuilder,
         private regService: RegistrationService
     ) {
         this.registerForm = this.formBuilder.group({
             fullName: ['', Validators.required],
-            email: ['', Validators.required],
+            email: ['', Validators.required, this.checkValidEmail],
             password: ['', Validators.required],
             repeatPassword: ['', Validators.required]
         });
@@ -30,10 +32,26 @@ export class SignupComponent implements OnInit {
 
     ngOnInit() {}
 
+    get f() {
+        return this.registerForm.controls;
+    }
+
     onSubmit(): void {
+        this.submitted = true;
+        if (this.registerForm.invalid) {
+            return;
+        }
         this.regService
             .registerUser(this.registerForm.value)
             .subscribe(data => {
+                console.log(data);
+                if (data.error) {
+                    Swal.fire('Error', data.errMessage, 'success');
+                    return;
+                } else if (data.validationError) {
+                    this.errors = data.validationErrors;
+                    return;
+                }
                 this.user = data.entity;
                 Swal.fire(
                     'Success',
@@ -43,5 +61,20 @@ export class SignupComponent implements OnInit {
                 );
             });
         this.registerForm.reset();
+    }
+    onEditing(value: any): void {
+        if (this.errors) {
+            this.errors[value.target.attributes.formcontrolname.value] = null;
+        }
+    }
+    checkValidEmail(control: AbstractControl) {
+        const emailPat = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/g;
+        return new Promise((res, rej) => {
+            if (emailPat.test(control.value)) {
+                res(null); // return null means validation pass
+            } else {
+                res({ vaild: false }); // failed with message
+            }
+        });
     }
 }
