@@ -15,4 +15,7 @@ export class RegistrationService {
         console.log(` in service ::: ${body}`);
         return this.http.post<Response>(this.global_url + 'add', body);
     }
+    loginUser(body: User): Observable<Response> {
+        return this.http.post<Response>(this.global_url + 'login', body);
+    }
 }
