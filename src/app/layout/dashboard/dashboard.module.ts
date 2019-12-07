@@ -1,15 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbCarouselModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { NgModule } from '@angular/core';
+import { NgbAlertModule, NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
+import { StatModule } from '../../shared';
+import { ProductComponent } from '../product/product.component';
+import { ChatComponent, NotificationComponent, TimelineComponent } from './components';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
-import {
-    TimelineComponent,
-    NotificationComponent,
-    ChatComponent
-} from './components';
-import { StatModule } from '../../shared';
+
 
 @NgModule({
     imports: [
@@ -17,13 +15,16 @@ import { StatModule } from '../../shared';
         NgbCarouselModule,
         NgbAlertModule,
         DashboardRoutingModule,
-        StatModule
+        StatModule,
+        NgbModule,
+        TranslateModule
     ],
     declarations: [
         DashboardComponent,
         TimelineComponent,
         NotificationComponent,
-        ChatComponent
+        ChatComponent,
+        ProductComponent
     ]
 })
 export class DashboardModule {}

@@ -1,0 +1,130 @@
+<div class="row mt-3 mb-3">
+  <div class="col-sm-12">
+    <div class="card card-default">
+      <div class="card-header">{{ 'Product Details' | translate }}</div>
+      <div class="card-body">
+        <ngb-tabset>
+          <ngb-tab title="{{ 'Add Product' | translate }}">
+            <ng-template ngbTabContent>
+              <div class="row mb-3">
+                <div class="col-sm-12">
+                  <div class="card card-default">
+                    <div class="card-body">
+                      <form role="form">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <fieldset class="form-group">
+                              <label class="form-control-label">{{ 'Product Name' | translate }}</label>
+                              <input type="text" class="form-control" formControlName="productName"
+                                [ngClass]="{'is-valid': false}">
+                              <div class="valid-feedback">
+                                Input success message
+                              </div>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                              <label class="form-control-label">{{ 'Quantity' | translate }}</label>
+                              <input type="text" class="form-control" formControlName="qty"
+                                [ngClass]="{'is-invalid': false}">
+                              <div class="invalid-feedback">
+                                Input error message
+                              </div>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                              <label class="form-control-label">{{ 'Purchase Price' | translate }}</label>
+                              <input type="text" class="form-control" formControlName="purchasePrice"
+                                [ngClass]="{'is-invalid': false}">
+                              <div class="invalid-feedback">
+                                Input error message
+                              </div>
+                            </fieldset>
+                            <fieldset class="form-group">
+                              <label class="form-control-label">{{ 'Category' | translate }}</label>
+                              <input type="text" class="form-control" formControlName="category"
+                                [ngClass]="{'is-valid': false}">
+                              <div class="valid-feedback">
+                                Input success message
+                              </div>
+                            </fieldset>
+                          </div>
+
+
+                          <div class="col-sm-6">
+                            <fieldset class="form-group">
+                              <label class="form-control-label">{{ 'Description' | translate }}</label>
+                              <input type="text" class="form-control" formControlName="desc"
+                                [ngClass]="{'is-invalid': false}">
+                              <div class="invalid-feedback">
+                                Input error message
+                              </div>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                              <label class="form-control-label">{{ 'Measurement' | translate }}</label>
+                              <select class="form-control" formControlName="measure" [ngClass]="{'is-invalid': false}">
+                                <option selected>KG</option>
+                                <option>NAG</option>
+                                <option>PACKETS</option>
+                              </select>
+                              <div class="invalid-feedback">
+                                Input error message
+                              </div>
+                            </fieldset>
+
+                            <fieldset class="form-group">
+                              <label class="form-control-label">{{ 'Sale Price' | translate }}</label>
+                              <input type="text" class="form-control" formControlName="salePrice"
+                                [ngClass]="{'is-invalid': false}">
+                              <div class="invalid-feedback">
+                                Input error message
+                              </div>
+                            </fieldset>
+                            <fieldset class="form-group">
+                              <br />
+                              <button type="submit"
+                                class="btn btn-primary form-control">{{ 'Save Product' | translate }}</button>
+                            </fieldset>
+                          </div>
+
+                        </div>
+                      </form>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab>
+            <ng-template ngbTabTitle><b>Fancy</b> title</ng-template>
+            <ng-template ngbTabContent>
+              <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko
+                farm-to-table
+                craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco
+                ad vinyl
+                cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS
+                salvia
+                yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit,
+                sustainable jean
+                shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr
+                butcher vero
+                sint qui sapiente accusamus tattooed echo park.</p>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab title="Disabled" [disabled]="true">
+            <ng-template ngbTabContent>
+              <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro
+                synth
+                master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro
+                keffiyeh
+                dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat
+                salvia cillum
+                iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+  </div>
+</div>
