@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { routerTransition } from '../router.animations';
+import { SharedService } from '../shared/services/shared.service';
 import { RegistrationService } from './registration.service';
 import { User } from './user';
 
@@ -20,7 +21,8 @@ export class SignupComponent implements OnInit {
     errors: { fullName: string; email: string; password: string };
     constructor(
         private formBuilder: FormBuilder,
-        private regService: RegistrationService
+        private regService: RegistrationService,
+        private loader: SharedService
     ) {
         this.registerForm = this.formBuilder.group({
             fullName: ['', Validators.required],
@@ -38,12 +40,13 @@ export class SignupComponent implements OnInit {
 
     onSubmit(): void {
         this.submitted = true;
+        this.loader.setLoading(true);
         if (this.registerForm.invalid) {
             return;
         }
-        this.regService
-            .registerUser(this.registerForm.value)
-            .subscribe(data => {
+        this.regService.registerUser(this.registerForm.value).subscribe(
+            data => {
+                this.loader.setLoading(false);
                 console.log(data);
                 if (data.error) {
                     Swal.fire('Error', data.errMessage, 'success');
@@ -53,13 +56,27 @@ export class SignupComponent implements OnInit {
                     return;
                 }
                 this.user = data.entity;
-                Swal.fire(
-                    'Success',
+                this.regService.buildAlert(
+                    'sucess',
                     'Registration successfull for user name : ' +
                         this.user.email,
                     'success'
                 );
-            });
+            },
+            err => {
+                this.loader.setLoading(false);
+                console.log(err);
+                if (err.status === 0) {
+                    this.regService.buildHtmlAlert(
+                        'Error',
+                        `Please check spring boot application is runnning or not <br><small> ${err.message}</small>`,
+                        'error'
+                    );
+                    return;
+                }
+                this.regService.buildHtmlAlert('Error', err, 'error');
+            }
+        );
         this.registerForm.reset();
     }
     onEditing(value: any): void {

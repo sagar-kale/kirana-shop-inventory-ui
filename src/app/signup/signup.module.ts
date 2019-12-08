@@ -6,7 +6,7 @@ import { SignupRoutingModule } from './signup-routing.module';
 import { SignupComponent } from './signup.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-
+import { LoaderComponent } from '../loader/loader.component';
 
 @NgModule({
     imports: [
@@ -18,6 +18,6 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
         NgbModule,
         SweetAlert2Module
     ],
-    declarations: [SignupComponent]
+    declarations: [SignupComponent, LoaderComponent]
 })
 export class SignupModule {}
