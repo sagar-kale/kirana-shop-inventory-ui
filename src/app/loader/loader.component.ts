@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SharedService } from '../shared/services/shared.service';
 
 @Component({
@@ -7,13 +7,14 @@ import { SharedService } from '../shared/services/shared.service';
     styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent implements OnInit {
-    isLoading = false;
+    @Input()
+    isLoading: boolean;
 
     constructor(private sharedService: SharedService) {}
 
     ngOnInit() {
-        this.sharedService.loading$.subscribe(val => {
-            this.isLoading = val;
-        });
+        // this.sharedService.loading$.subscribe(val => {
+        //     this.isLoading = val;
+        // });
     }
 }

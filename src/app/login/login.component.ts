@@ -14,7 +14,7 @@ import { RegistrationService } from '../signup/registration.service';
 })
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
-
+    isLoading = false;
     constructor(
         public router: Router,
         private loginService: RegistrationService,
@@ -30,11 +30,13 @@ export class LoginComponent implements OnInit {
     ngOnInit() {}
 
     onLoggedin() {
-        this.loader.setLoading(true);
+        // this.loader.setLoading(true);
+        this.isLoading = true;
         this.loginService.loginUser(this.loginForm.value).subscribe(
             response => {
                 console.log(response);
-                this.loader.setLoading(false);
+                // this.loader.setLoading(false);
+                this.isLoading = false;
                 if (response.error) {
                     Swal.fire('Error', response.errMessage, 'error');
                     this.loginForm.reset();
@@ -48,7 +50,8 @@ export class LoginComponent implements OnInit {
                 this.router.navigate(['/dashboard']);
             },
             err => {
-                this.loader.setLoading(false);
+                // this.loader.setLoading(false);
+                this.isLoading = false;
                 console.log(err);
                 if (err.status === 0) {
                     this.loginService.buildHtmlAlert(
