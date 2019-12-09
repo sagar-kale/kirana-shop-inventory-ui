@@ -41,8 +41,10 @@
                             </fieldset>
                             <fieldset class="form-group">
                               <label class="form-control-label">{{ 'Category' | translate }}</label>
-                              <input type="text" class="form-control" formControlName="category"
-                                [ngClass]="{'is-valid': false}">
+                              <select class="form-control" formControlName="catId" [ngClass]="{'is-invalid': false}">
+                                <option *ngFor="let item of categoryList | async" value="item.id">{{item.categoryName}}
+                                </option>
+                              </select>
                               <div class="valid-feedback">
                                 Input success message
                               </div>
@@ -63,9 +65,7 @@
                             <fieldset class="form-group">
                               <label class="form-control-label">{{ 'Measurement' | translate }}</label>
                               <select class="form-control" formControlName="measure" [ngClass]="{'is-invalid': false}">
-                                <option selected>KG</option>
-                                <option>NAG</option>
-                                <option>PACKETS</option>
+                                <option *ngFor="let item of measureList | async" value="item.id">{{item.name}}</option>
                               </select>
                               <div class="invalid-feedback">
                                 Input error message

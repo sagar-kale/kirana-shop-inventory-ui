@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+    AbstractControl,
+    FormBuilder,
+    FormGroup,
+    Validators
+} from '@angular/forms';
 import Swal from 'sweetalert2';
 import { routerTransition } from '../router.animations';
 import { SharedService } from '../shared/services/shared.service';
@@ -18,6 +23,7 @@ export class SignupComponent implements OnInit {
     message: string;
     closed = false;
     submitted = false;
+    loading = false;
     errors: { fullName: string; email: string; password: string };
     constructor(
         private formBuilder: FormBuilder,
@@ -40,13 +46,13 @@ export class SignupComponent implements OnInit {
 
     onSubmit(): void {
         this.submitted = true;
-        this.loader.setLoading(true);
+        this.loading = true;
         if (this.registerForm.invalid) {
             return;
         }
         this.regService.registerUser(this.registerForm.value).subscribe(
             data => {
-                this.loader.setLoading(false);
+                this.loading = false;
                 console.log(data);
                 if (data.error) {
                     Swal.fire('Error', data.errMessage, 'success');
@@ -64,7 +70,7 @@ export class SignupComponent implements OnInit {
                 );
             },
             err => {
-                this.loader.setLoading(false);
+                this.loading = false;
                 console.log(err);
                 if (err.status === 0) {
                     this.regService.buildHtmlAlert(
