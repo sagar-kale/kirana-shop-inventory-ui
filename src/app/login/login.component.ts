@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
         public router: Router,
         private loginService: RegistrationService,
         private formBuilder: FormBuilder,
-        private loader: SharedService
+        private sharedService: SharedService
     ) {
         this.loginForm = this.formBuilder.group({
             email: ['', Validators.required],
@@ -54,14 +54,14 @@ export class LoginComponent implements OnInit {
                 this.isLoading = false;
                 console.log(err);
                 if (err.status === 0) {
-                    this.loginService.buildHtmlAlert(
+                    this.sharedService.buildHtmlAlert(
                         'Error',
                         `Please check spring boot application is runnning or not <br><small> ${err.message}</small>`,
                         'error'
                     );
                     return;
                 }
-                this.loginService.buildHtmlAlert('Error', err, 'error');
+                this.sharedService.buildHtmlAlert('Error', err, 'error');
             }
         );
     }

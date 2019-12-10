@@ -2,18 +2,22 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { Response } from 'src/app/models/response';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ProductService {
-    private globalUrl = 'http://localhost:8080/api';
+    private globalUrl;
     private PRODUCT = '/product';
     private CATEGORY = '/category';
     private MEASUREMENT = '/measurement';
     private MEASUREMENTS = '/measurements';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        this.globalUrl = environment.apiUrl;
+    }
 
     getAllMeasurements(): Observable<any> {
         return this.http
@@ -31,5 +35,13 @@ export class ProductService {
     }
     getAllCategories(): Observable<any> {
         return this.http.get<any>(this.globalUrl + this.CATEGORY);
+    }
+    saveProduct(body: any): Observable<Response> {
+        return this.http.post<Response>(this.globalUrl + this.PRODUCT, body);
+    }
+    isProductNameExists(name: string): Observable<boolean> {
+        return this.http.get<boolean>(
+            `${this.globalUrl}${this.PRODUCT}/exists?productName=${name}`
+        );
     }
 }

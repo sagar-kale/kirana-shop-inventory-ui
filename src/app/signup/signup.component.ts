@@ -28,11 +28,15 @@ export class SignupComponent implements OnInit {
     constructor(
         private formBuilder: FormBuilder,
         private regService: RegistrationService,
-        private loader: SharedService
+        private sharedService: SharedService
     ) {
         this.registerForm = this.formBuilder.group({
             fullName: ['', Validators.required],
-            email: ['', Validators.required, this.checkValidEmail],
+            email: [
+                '',
+                Validators.required,
+                this.sharedService.checkValidEmail
+            ],
             password: ['', Validators.required],
             repeatPassword: ['', Validators.required]
         });
@@ -62,7 +66,7 @@ export class SignupComponent implements OnInit {
                     return;
                 }
                 this.user = data.entity;
-                this.regService.buildAlert(
+                this.sharedService.buildAlert(
                     'sucess',
                     'Registration successfull for user name : ' +
                         this.user.email,
@@ -73,14 +77,14 @@ export class SignupComponent implements OnInit {
                 this.loading = false;
                 console.log(err);
                 if (err.status === 0) {
-                    this.regService.buildHtmlAlert(
+                    this.sharedService.buildHtmlAlert(
                         'Error',
                         `Please check spring boot application is runnning or not <br><small> ${err.message}</small>`,
                         'error'
                     );
                     return;
                 }
-                this.regService.buildHtmlAlert('Error', err, 'error');
+                this.sharedService.buildHtmlAlert('Error', err, 'error');
             }
         );
         this.registerForm.reset();
@@ -89,15 +93,5 @@ export class SignupComponent implements OnInit {
         if (this.errors) {
             this.errors[value.target.attributes.formcontrolname.value] = null;
         }
-    }
-    checkValidEmail(control: AbstractControl) {
-        const emailPat = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/g;
-        return new Promise((res, rej) => {
-            if (emailPat.test(control.value)) {
-                res(null); // return null means validation pass
-            } else {
-                res({ vaild: false }); // failed with message
-            }
-        });
     }
 }

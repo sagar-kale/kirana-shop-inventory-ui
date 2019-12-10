@@ -7,6 +7,7 @@ export class Response {
     entities?: any[];
     validationError?: boolean;
     success?: boolean;
-    validationErrors: any;
-    error: boolean;
+    validationErrors?: any;
+    error?: boolean;
+    msg?: string;
 }
