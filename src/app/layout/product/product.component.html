@@ -10,7 +10,7 @@
                 <div class="col-sm-12">
                   <div class="card card-default">
                     <div class="card-body">
-                      <form role="form">
+                      <form role="form" [formGroup]="productForm" (ngSubmit)="saveProduct()">
                         <div class="row">
                           <div class="col-sm-6">
                             <fieldset class="form-group">
@@ -24,25 +24,29 @@
 
                             <fieldset class="form-group">
                               <label class="form-control-label">{{ 'Quantity' | translate }}</label>
-                              <input type="text" class="form-control" formControlName="qty"
+                              <input type="number" class="form-control" formControlName="qty"
                                 [ngClass]="{'is-invalid': false}">
                               <div class="invalid-feedback">
                                 Input error message
                               </div>
                             </fieldset>
-
                             <fieldset class="form-group">
                               <label class="form-control-label">{{ 'Purchase Price' | translate }}</label>
-                              <input type="text" class="form-control" formControlName="purchasePrice"
-                                [ngClass]="{'is-invalid': false}">
-                              <div class="invalid-feedback">
-                                Input error message
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
+                                </div>
+                                <input type="number" class="form-control" formControlName="purchasePrice"
+                                  [ngClass]="{'is-invalid': false}">
+                                <div class="invalid-feedback">
+                                  Input error message
+                                </div>
                               </div>
                             </fieldset>
                             <fieldset class="form-group">
                               <label class="form-control-label">{{ 'Category' | translate }}</label>
                               <select class="form-control" formControlName="catId" [ngClass]="{'is-invalid': false}">
-                                <option *ngFor="let item of categoryList | async" value="item.id">{{item.categoryName}}
+                                <option *ngFor="let item of categoryList | async" value="{{item.id}}">{{item.categoryName}}
                                 </option>
                               </select>
                               <div class="valid-feedback">
@@ -65,7 +69,8 @@
                             <fieldset class="form-group">
                               <label class="form-control-label">{{ 'Measurement' | translate }}</label>
                               <select class="form-control" formControlName="measure" [ngClass]="{'is-invalid': false}">
-                                <option *ngFor="let item of measureList | async" value="item.id">{{item.name}}</option>
+                                <option *ngFor="let item of measureList | async" value="{{item.name}}">{{item.name}}
+                                </option>
                               </select>
                               <div class="invalid-feedback">
                                 Input error message
@@ -74,16 +79,27 @@
 
                             <fieldset class="form-group">
                               <label class="form-control-label">{{ 'Sale Price' | translate }}</label>
-                              <input type="text" class="form-control" formControlName="salePrice"
-                                [ngClass]="{'is-invalid': false}">
-                              <div class="invalid-feedback">
-                                Input error message
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text"><i class="fa fa-inr"></i></span>
+                                </div>
+
+                                <input type="number" class="form-control" formControlName="salePrice"
+                                  [ngClass]="{'is-invalid': false}">
+                                <div class="invalid-feedback">
+                                  Input error message
+                                </div>
                               </div>
                             </fieldset>
+
                             <fieldset class="form-group">
-                              <br />
-                              <button type="submit"
-                                class="btn btn-primary form-control">{{ 'Save Product' | translate }}</button>
+                              <p>Form Status : {{productForm.status}} </p>
+                              <button *ngIf="!isLoading" type="submit" class="btn btn-primary form-control"
+                                [disabled]="!productForm.valid">
+                                {{ 'Save Product' | translate }}</button>
+                              <button *ngIf="isLoading" class="btn btn-warning form-control" [disabled]="isLoading"><i
+                                  *ngIf="isLoading" class="fa fa-refresh fa-spin fa-fw"></i>
+                                {{ 'Saving Product...' | translate }}</button>
                             </fieldset>
                           </div>
 

@@ -7,14 +7,21 @@ import { map } from 'rxjs/operators';
     providedIn: 'root'
 })
 export class ProductService {
-    private globalUrl = 'http://localhost:8080/api/product/';
+    private globalUrl = 'http://localhost:8080/api';
+    private PRODUCT = '/product';
+    private CATEGORY = '/category';
+    private MEASUREMENT = '/measurement';
+    private MEASUREMENTS = '/measurements';
 
     constructor(private http: HttpClient) {}
 
     getAllMeasurements(): Observable<any> {
         return this.http
             .get<any>(
-                this.globalUrl + 'measurements?size=1000&sort=createdAt,desc'
+                this.globalUrl +
+                    this.PRODUCT +
+                    this.MEASUREMENTS +
+                    '?size=1000&sort=createdAt,desc'
             )
             .pipe(
                 map(res => {
@@ -23,6 +30,6 @@ export class ProductService {
             );
     }
     getAllCategories(): Observable<any> {
-        return this.http.get<any>('http://localhost:8080/api/category');
+        return this.http.get<any>(this.globalUrl + this.CATEGORY);
     }
 }

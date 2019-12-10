@@ -7,6 +7,7 @@ import { ProductComponent } from '../product/product.component';
 import { ChatComponent, NotificationComponent, TimelineComponent } from './components';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +18,9 @@ import { DashboardComponent } from './dashboard.component';
         DashboardRoutingModule,
         StatModule,
         NgbModule,
-        TranslateModule
+        TranslateModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     declarations: [
         DashboardComponent,
