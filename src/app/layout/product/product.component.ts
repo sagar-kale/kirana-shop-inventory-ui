@@ -89,6 +89,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
                 this.sharedService.buildHtmlAlert('Error', err, 'error');
             }
         );
+        this.submitted = false;
     }
 
     updateProduct(formValue: any): void {
