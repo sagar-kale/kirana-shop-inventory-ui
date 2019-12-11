@@ -16,7 +16,6 @@ export class ProductComponent implements OnInit, AfterViewInit {
     categoryList: Observable<any>;
     productList: Observable<any>;
     isLoading = false;
-    saveBtnTitle = 'Save Product';
     productForm: FormGroup;
     errorsMap: Map<string, string>;
     errorsObj: any;

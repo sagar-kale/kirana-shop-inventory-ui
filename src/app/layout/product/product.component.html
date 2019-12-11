@@ -190,7 +190,7 @@
                                 <fieldset class="form-group">
                                   <label class="form-control-label">{{ 'Product Name' | translate }}</label>
                                   <input type="text" class="form-control" name="productName"
-                                    [ngClass]="{'is-invalid': nameExists, 'is-valid': !nameExists && this.f.productName.value }"
+                                    [ngClass]="{'is-invalid': nameExists, 'is-valid': !nameExists }"
                                     #pName (keyup)="this.productName$.next(pName.value)" [value]="product?.productName">
                                   <div class="invalid-feedback" *ngIf="nameExists">
                                     {{ 'Product Exists' | translate }}
