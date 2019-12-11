@@ -36,6 +36,9 @@ export class ProductService {
     getAllCategories(): Observable<any> {
         return this.http.get<any>(this.globalUrl + this.CATEGORY);
     }
+    getAllProduct(): Observable<any> {
+        return this.http.get<any>(this.globalUrl + this.PRODUCT);
+    }
     saveProduct(body: any): Observable<Response> {
         return this.http.post<Response>(this.globalUrl + this.PRODUCT, body);
     }
@@ -43,5 +46,11 @@ export class ProductService {
         return this.http.get<boolean>(
             `${this.globalUrl}${this.PRODUCT}/exists?productName=${name}`
         );
+    }
+    removeProduct(id: number): Observable<Response> {
+        return this.http.delete(`${this.globalUrl}${this.PRODUCT}/${id}`);
+    }
+    retriveProductById(id: number): Observable<any> {
+        return this.http.get(`${this.globalUrl}${this.PRODUCT}/${id}`);
     }
 }

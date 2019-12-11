@@ -4,6 +4,7 @@ import { ProductService } from './product.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-product',
@@ -13,6 +14,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 export class ProductComponent implements OnInit, AfterViewInit {
     measureList: Observable<any>;
     categoryList: Observable<any>;
+    productList: Observable<any>;
     isLoading = false;
     saveBtnTitle = 'Save Product';
     productForm: FormGroup;
@@ -21,11 +23,14 @@ export class ProductComponent implements OnInit, AfterViewInit {
     submitted = false;
     productName$: Subject<string> = new Subject();
     nameExists = false;
+    closeResult = '';
+    product: any;
 
     constructor(
         private productService: ProductService,
         private formBuilder: FormBuilder,
-        private sharedService: SharedService
+        private sharedService: SharedService,
+        private modalService: NgbModal
     ) {
         this.productForm = this.formBuilder.group({
             productName: ['', Validators.required],
@@ -42,6 +47,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.measureList = this.productService.getAllMeasurements();
         this.categoryList = this.productService.getAllCategories();
+        this.productList = this.productService.getAllProduct();
         this.productName$
             .pipe(debounceTime(500), distinctUntilChanged())
             .subscribe(value => this.checkName(value));
@@ -85,12 +91,69 @@ export class ProductComponent implements OnInit, AfterViewInit {
             }
         );
     }
+
+    updateProduct(formValue: any): void {
+        console.log(formValue);
+        alert(JSON.stringify(formValue));
+    }
     get f() {
         return this.productForm.controls;
     }
-    checkName(val: string) {
-        this.productService.isProductNameExists(val).subscribe(res => {
-            this.nameExists = res;
+    checkName(val: string): void {
+        if (val) {
+            this.productService.isProductNameExists(val).subscribe(res => {
+                this.nameExists = res;
+            });
+        }
+    }
+    deleteProduct(id: number): void {
+        this.productService.removeProduct(id).subscribe(res => {
+            if (res.error) {
+                this.sharedService.buildAlert('Error', res.errMessage, 'error');
+                return;
+            }
+            this.sharedService.buildAlert('Success', res.msg, 'success');
+            this.retriveAllProduct();
         });
+    }
+    retriveAllCategories(): void {
+        this.categoryList = this.productService.getAllCategories();
+    }
+    retriveAllProduct(): void {
+        this.productList = this.productService.getAllProduct();
+    }
+    retriveAllMeasurements(): void {
+        this.measureList = this.productService.getAllMeasurements();
+    }
+
+    open(content: any, productId: number) {
+        this.getProduct(productId);
+        this.modalService.open(content, { size: 'lg' }).result.then(
+            result => {
+                this.closeResult = `Closed with: ${result}`;
+            },
+            reason => {
+                this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+            }
+        );
+    }
+
+    private getDismissReason(reason: any): string {
+        if (reason === ModalDismissReasons.ESC) {
+            return 'by pressing ESC';
+        } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+            return 'by clicking on a backdrop';
+        } else {
+            return `with: ${reason}`;
+        }
+    }
+
+    getProduct(id: number): void {
+        this.productService.retriveProductById(id).subscribe(
+            res => {
+                this.product = res;
+            },
+            err => this.sharedService.buildAlert('Error', err, 'error')
+        );
     }
 }
