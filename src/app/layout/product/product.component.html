@@ -3,8 +3,8 @@
     <div class="card card-default">
       <div class="card-header">{{ 'Product Details' | translate }}</div>
       <div class="card-body">
-        <ngb-tabset [justify]="'start'">
-          <ngb-tab title="{{ 'Add Product' | translate }}">
+        <ngb-tabset [justify]="'start'" #productTab>
+          <ngb-tab title="{{ pTabTitle | translate }}" id="tab-addProduct">
             <ng-template ngbTabContent>
               <div class="row mb-3">
                 <div class="col-sm-12">
@@ -20,7 +20,7 @@
                   <div class="card-body">
 
 
-                    <form role="form" [formGroup]="productForm" (ngSubmit)="saveProduct()">
+                    <form role="form" [formGroup]="productForm" (ngSubmit)="onSubmit()">
                       <div class="row">
                         <div class="col-sm-6">
                           <fieldset class="form-group">
@@ -107,16 +107,22 @@
                           </fieldset>
 
                           <fieldset class="form-group">
-                            <p>Form Status : {{productForm.status | translate }} </p>
-                            <button *ngIf="!isLoading" type="submit" class="btn btn-primary form-control"
-                              [disabled]="!productForm.valid">
-                              {{ 'save' | translate }}</button>
-                            <button *ngIf="isLoading" class="btn btn-warning form-control" [disabled]="isLoading"><i
-                                *ngIf="isLoading" class="fa fa-refresh fa-spin fa-fw"></i>
-                              {{ 'Saving Product' | translate }}</button>
+                            <p>Form Status</p>
+                            <hr />
+                            <p><b> {{productForm.status | translate }}</b> </p>
                           </fieldset>
                         </div>
 
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-2"><button *ngIf="!isLoading" type="submit" class="btn btn-lg btn-primary"
+                            [disabled]="!productForm.valid">
+                            {{ btnSaveUpdateTitle | translate }}</button>
+                          <button *ngIf="isLoading" class="btn btn-warning btn-lg" [disabled]="isLoading"><i
+                              *ngIf="isLoading" class="fa fa-refresh fa-spin fa-fw"></i>
+                            {{ 'Saving Product' | translate }}</button></div>
+                        <div class="col-lg-2"><button *ngIf="!isNew" class="btn btn-lg btn-primary"
+                            (click)="clearForm()" type="reset">Reset</button></div>
                       </div>
                     </form>
                   </div>
@@ -126,8 +132,7 @@
               </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab>
-            <ng-template ngbTabTitle>{{ 'view_products' | translate }}</ng-template>
+          <ngb-tab title="{{ 'view_products' | translate }}" id="tab-viewProduct">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <div class="col col-lg-12">
@@ -163,7 +168,7 @@
                             <td>{{ item.createdAt }}</td>
                             <td>{{ item.updatedAt }}</td>
                             <td><button type="button" class="btn btn-primary btn-sm"
-                                (click)="open(content,item.id)">{{ 'edit' | translate }}</button>
+                                (click)="productTab.select('tab-addProduct');loadProductToEdit(item.id)">{{ 'edit' | translate }}</button>
                               &nbsp;
                               <button type="button" class="btn btn-danger btn-sm"
                                 (click)="deleteProduct(item.id)">{{ 'delete' | translate }}</button>
@@ -175,6 +180,8 @@
 
                     <!-- Modal for update button -->
 
+                    <!-- <button type="button" class="btn btn-primary btn-sm"
+                                (click)="open(content,item.id)">{{ 'edit' | translate }}</button>
                     <ng-template #content let-modal>
                       <div class="modal-header">
                         <h4 class="modal-title" id="modal-basic-title">{{ 'Product update' | translate }}</h4>
@@ -184,14 +191,24 @@
                       </div>
                       <div class="modal-body">
                         <div class="container-fluid">
-                          <form role="form" #updateForm (ngSubmit)="updateProduct(updateForm.value)">
+
+                            <div class="mt-3" *ngIf="updateForm.form.invalid">
+                                <ul class="list-group list-group-flush">
+                                  <li class="list-group-item list-group-item-warning">* Please enter the field value to update</li>
+                                  <li class="list-group-item list-group-item-warning" *ngFor="let error of errorsMap | keyvalue">
+                                    Field : {{error.key}} - {{error.value}}</li>
+                                </ul>
+                              </div>
+
+                          <form role="form" #updateForm="ngForm" (ngSubmit)="updateProduct(updateForm.value)">
                             <div class="row">
                               <div class="col-sm-6">
                                 <fieldset class="form-group">
                                   <label class="form-control-label">{{ 'Product Name' | translate }}</label>
                                   <input type="text" class="form-control" name="productName"
-                                    [ngClass]="{'is-invalid': nameExists, 'is-valid': !nameExists }"
-                                    #pName (keyup)="this.productName$.next(pName.value)" [value]="product?.productName">
+                                    [ngClass]="{'is-invalid': nameExists, 'is-valid': !nameExists }" #pName
+                                    (keyup)="this.productName$.next(pName.value)" [value]="product?.productName"
+                                    ngModel>
                                   <div class="invalid-feedback" *ngIf="nameExists">
                                     {{ 'Product Exists' | translate }}
                                   </div>
@@ -199,7 +216,7 @@
 
                                 <fieldset class="form-group">
                                   <label class="form-control-label">{{ 'Quantity' | translate }}</label>
-                                  <input type="number" class="form-control" name="qty">
+                                  <input type="number" class="form-control" name="qty" [value]="product?.qty" ngModel>
                                 </fieldset>
                                 <fieldset class="form-group">
                                   <label class="form-control-label">{{ 'Purchase Price' | translate }}</label>
@@ -207,14 +224,15 @@
                                     <div class="input-group-prepend">
                                       <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
                                     </div>
-                                    <input type="number" class="form-control" name="purchasePrice">
+                                    <input type="number" class="form-control" name="purchasePrice"
+                                      [value]="product?.purchasePrice" ngModel required>
                                   </div>
                                 </fieldset>
                                 <fieldset class="form-group">
                                   <label class="form-control-label">{{ 'Category' | translate }}</label>
-                                  <select class="form-control" name="catId">
-                                    <option>Select Category</option>
-                                    <option *ngFor="let item of categoryList | async" value="{{item.id}}">
+                                  <select class="form-control" name="catId" ngModel required>
+                                  
+                                    <option *ngFor="let item of categoryList | async" [value]="item.id">
                                       {{item.categoryName}}
                                     </option>
                                   </select>
@@ -225,13 +243,12 @@
                               <div class="col-sm-6">
                                 <fieldset class="form-group">
                                   <label class="form-control-label">{{ 'product_desc' | translate }}</label>
-                                  <input type="text" class="form-control" name="desc">
+                                  <input type="text" class="form-control" name="desc" [value]='product?.desc' ngModel>
                                 </fieldset>
 
                                 <fieldset class="form-group">
                                   <label class="form-control-label">{{ 'Measurement' | translate }}</label>
-                                  <select class="form-control" name="measure">
-                                      <option>Select Measurement</option>
+                                  <select class="form-control" name="measure" ngModel required>                                
                                     <option *ngFor="let item of measureList | async" value="{{item.name}}">{{item.name}}
                                     </option>
                                   </select>
@@ -244,17 +261,18 @@
                                       <span class="input-group-text"><i class="fa fa-inr"></i></span>
                                     </div>
 
-                                    <input type="number" class="form-control" name="salePrice">
+                                    <input type="number" class="form-control" name="salePrice"
+                                      [value]="product?.salePrice" ngModel>
                                   </div>
                                 </fieldset>
 
                                 <fieldset class="form-group">
-                                  <p>Form Status : {{productForm.status | translate }} </p>
+                                  <p>Form Status : {{updateForm.form.status | translate }} </p>
                                   <button *ngIf="!isLoading" type="submit" class="btn btn-primary form-control"
-                                    [disabled]="false">
+                                    [disabled]="updateForm.form.invalid">
                                     {{ 'Upadate' | translate }}</button>
                                   <button *ngIf="isLoading" class="btn btn-warning form-control"
-                                    [disabled]="isLoading"><i *ngIf="isLoading" class="fa fa-refresh fa-spin fa-fw"></i>
+                                    [disabled]="true"><i *ngIf="isLoading" class="fa fa-refresh fa-spin fa-fw"></i>
                                     {{ 'Updating Product' | translate }}</button>
                                 </fieldset>
                               </div>
@@ -268,7 +286,7 @@
                         <button type="button" class="btn btn-secondary"
                           (click)="modal.close('Close click')">Close</button>
                       </div>
-                    </ng-template>
+                    </ng-template> -->
 
                     <!-- end of Modal for update button -->
 
