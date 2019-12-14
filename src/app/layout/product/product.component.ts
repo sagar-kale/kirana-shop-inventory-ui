@@ -71,11 +71,11 @@ export class ProductComponent implements OnInit, AfterViewInit {
         if (this.productIdUpdate === null) {
             this.productService.saveProduct(product).subscribe(
                 res => {
-                    this.clearForm();
                     if (res.error) {
                         this.sharedService.displayError(res.errMessage);
                         return;
                     } else if (res.validationError) {
+                        this.isLoading = false;
                         this.errorsObj = res.validationErrors;
                         this.errorsMap = this.errorsObj;
                         for (const key of Object.keys(res.validationErrors)) {
@@ -86,7 +86,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
                         return;
                     }
                     this.sharedService.displaySuccessMsg(res.msg);
-                    this.productForm.reset();
+                    this.clearForm();
                 },
                 err => {
                     this.clearForm();
@@ -106,15 +106,35 @@ export class ProductComponent implements OnInit, AfterViewInit {
             console.log('updating existing product...', this.productIdUpdate);
             console.log(product);
             product.id = this.productIdUpdate;
-            setTimeout(() => {
-                this.sharedService.buildAlert(
-                    'Update',
-                    JSON.stringify(product),
-                    'success'
-                );
-                this.productIdUpdate = null;
-                this.clearForm();
-            }, 5000);
+
+            this.productService.updateProduct(product).subscribe(
+                res => {
+                    if (res.error) {
+                        this.sharedService.displayError(res.errMessage);
+                        return;
+                    } else if (res.validationError) {
+                        this.isLoading = false;
+                        this.errorsObj = res.validationErrors;
+                        this.errorsMap = this.errorsObj;
+                        for (const key of Object.keys(res.validationErrors)) {
+                            this.productForm.controls[key].setErrors({
+                                incorrect: true
+                            });
+                        }
+                        return;
+                    }
+                    this.sharedService.buildAlert(
+                        'update',
+                        'Update Sucesfull',
+                        'success'
+                    );
+
+                    this.clearForm();
+                },
+                err => {
+                    this.sharedService.displayError(JSON.stringify(err));
+                }
+            );
         }
     }
 
@@ -195,5 +215,6 @@ export class ProductComponent implements OnInit, AfterViewInit {
         this.pTabTitle = 'Add Product';
         this.btnSavingUpdatingTitle = 'Saving Product';
         this.productForm.reset();
+        this.productIdUpdate = null;
     }
 }

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Response } from 'src/app/models/response';
+import { Product } from './product';
 
 @Injectable({
     providedIn: 'root'
@@ -52,5 +53,12 @@ export class ProductService {
     }
     retriveProductById(id: number): Observable<any> {
         return this.http.get(`${this.globalUrl}${this.PRODUCT}/${id}`);
+    }
+
+    updateProduct(body: Product): Observable<Response> {
+        return this.http.put<Response>(
+            this.globalUrl + this.PRODUCT + '/' + body.id,
+            body
+        );
     }
 }

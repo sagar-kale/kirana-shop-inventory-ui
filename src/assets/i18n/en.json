@@ -57,5 +57,6 @@
     "delete": "Delete",
     "edit": "Edit",
     "action": "Action",
-    "view_products": "View Products"
+    "view_products": "View Products",
+    "total_profit": "Total Profit"
 }
