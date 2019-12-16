@@ -1,0 +1,90 @@
+<div class="container-fluid bg-light py-3" [@routerTransition]>
+  <app-page-header [heading]="'Customer'" [icon]="'fa fa-user-o'"></app-page-header>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-body">
+        <h3 class="text-center mb-4">Add Customer</h3>
+
+
+        <div class="alert alert-success" *ngIf="message">
+          <a class="close font-weight-light" data-dismiss="alert">×</a>{{message}}
+        </div>
+
+
+        <form id="contact-form" [formGroup]="customerForm" (ngSubmit)="onSubmit()" role="form">
+          <fieldset>
+            <div class="form-group">
+              <input class="form-control input-lg" placeholder="Enter Name" name="name" type="text"
+                formControlName="name">
+              <div class="alert alert-danger" *ngIf="submitted && customerForm.controls.name.errors">
+                <a class="close font-weight-light" data-dismiss="alert"
+                  *ngIf="customerForm.controls.name.errors.required">×</a>Your Name is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <input class="form-control input-lg" placeholder="E-mail Address" name="email" type="text"
+                formControlName="email">
+
+              <div class="alert alert-danger" *ngIf="submitted && customerForm.controls.email.errors">
+                <a class="close font-weight-light" data-dismiss="alert"
+                  *ngIf="customerForm.controls.email.errors.required">×</a>Your Email is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <input class="form-control input-lg" placeholder="phone" name="phone" value="" type="text"
+                formControlName="phone" maxlength="10">
+              <div class="alert alert-danger" *ngIf="submitted && customerForm.controls.phone.errors">
+                <a class="close font-weight-light" data-dismiss="alert"
+                  *ngIf="customerForm.controls.phone.errors.required">×</a>Your phone is required.
+              </div>
+            </div>
+            <div class="form-group">
+              <input class="form-control input-lg" placeholder="address" name="address" value="" type="text"
+                formControlName="address">
+              <div class="alert alert-danger" *ngIf="submitted && customerForm.controls.address.errors">
+                <a class="close font-weight-light" data-dismiss="alert"
+                  *ngIf="customerForm.controls.address.errors.required">×</a>Your address is required.
+              </div>
+            </div>
+
+
+            <input *ngIf="isNew" class="btn btn-lg btn-primary btn-block" value="Add" type="submit"
+              [disabled]="customerForm.invalid">
+            <input *ngIf="!isNew" class="btn btn-lg btn-primary btn-block" value="Update" type="submit">
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-body">
+        <h3 class="text-center mb-4">Customer Information</h3>
+        <div class="table-responsive">
+          <table class="table">
+            <th>Name </th>
+            <th>Email</th>
+            <th>Phone </th>
+            <th>Address </th>
+            <th>Action</th>
+            <th>Action</th>
+
+            <tr *ngFor="let customer of customerList | async">
+              <td>{{customer.name}}</td>
+              <td>{{customer.email}}</td>
+              <td>{{customer.phone}}</td>
+              <td>{{customer.address}}</td>
+              <td>
+                <button type="button" class="btn btn-info" matTooltip="Click Edit Button"
+                  (click)="loadCustToEdit(customer.id)">Edit</button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger" matTooltip="Click Delete Button"
+                  (click)="deleteCustomer(customer.id)">Delete</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

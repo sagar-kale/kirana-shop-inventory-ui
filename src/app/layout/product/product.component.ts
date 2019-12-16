@@ -6,6 +6,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { Product } from './product';
 import { ProductService } from './product.service';
+import { Customer } from '../customer/customer';
+import { CustomerService } from '../customer/customer.service';
 
 @Component({
     selector: 'app-product',
@@ -16,6 +18,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     measureList: Observable<any>;
     categoryList: Observable<any>;
     productList: Observable<any>;
+    customerList: Observable<Customer[]>;
     isLoading = false;
     productForm: FormGroup;
     errorsMap: Map<string, string>;
@@ -26,7 +29,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     closeResult = '';
     productIdUpdate = null;
     btnSaveUpdateTitle = 'save';
-    pTabTitle = 'Add Product';
+    pTabTitle = 'Purchase Product';
     btnSavingUpdatingTitle = 'Saving Product';
     isNew = true;
 
@@ -34,7 +37,8 @@ export class ProductComponent implements OnInit, AfterViewInit {
         private productService: ProductService,
         private formBuilder: FormBuilder,
         private sharedService: SharedService,
-        private modalService: NgbModal
+        private modalService: NgbModal,
+        private customerService: CustomerService
     ) {
         this.productForm = this.formBuilder.group({
             productName: ['', Validators.required],
@@ -43,6 +47,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
             salePrice: ['', Validators.required],
             catId: ['', Validators.required],
             measure: ['', Validators.required],
+            customer: [null, Validators.required],
             desc: ['']
         });
     }
@@ -52,6 +57,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
         this.measureList = this.productService.getAllMeasurements();
         this.categoryList = this.productService.getAllCategories();
         this.productList = this.productService.getAllProduct();
+        this.customerList = this.customerService.getAllCustomers();
         this.productName$
             .pipe(debounceTime(500), distinctUntilChanged())
             .subscribe(value => this.checkName(value));
@@ -59,6 +65,9 @@ export class ProductComponent implements OnInit, AfterViewInit {
     onSubmit() {
         this.submitted = true;
         this.isLoading = true;
+        this.productForm.controls.customer.setValue({
+            id: this.productForm.controls.customer.value
+        });
         if (this.productForm.invalid) {
             return;
         }
@@ -68,6 +77,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
 
     saveProduct(product: Product) {
         this.errorsMap = null;
+        console.log(product);
         if (this.productIdUpdate === null) {
             this.productService.saveProduct(product).subscribe(
                 res => {

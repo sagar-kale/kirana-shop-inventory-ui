@@ -66,6 +66,10 @@
                               {{errorsObj.catId}}
                             </div>
                           </fieldset>
+
+                          <fieldset class="form-group">
+                            <p>Form Status : {{productForm.status | translate }}</p>
+                          </fieldset>
                         </div>
 
 
@@ -107,9 +111,20 @@
                           </fieldset>
 
                           <fieldset class="form-group">
-                            <p>Form Status</p>
-                            <hr />
-                            <p><b> {{productForm.status | translate }}</b> </p>
+                            <label class="form-control-label">{{ 'Customer' | translate }}</label>
+                            <select class="form-control" formControlName="customer"
+                              [ngClass]="{'is-invalid': this.f.customer.invalid && submitted}">
+                              <option *ngFor="let item of customerList | async" value="{{item.id}}">
+                                {{item.name}}
+                              </option>
+                            </select>
+                            <div class="invalid-feedback" *ngIf="this.f.catId.invalid && submitted">
+                              {{errorsObj.catId}}
+                            </div>
+                          </fieldset>
+                          <fieldset class="form-group">
+                            <p><b>Total Price: </b>&nbsp; <span><i class="fa fa-inr"></i></span>
+                              {{ f.purchasePrice.value * f.qty.value }} </p>
                           </fieldset>
                         </div>
 

@@ -4,7 +4,7 @@
   "license": "Apache",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build --prod",
     "gitbuild": "ng build --prod --base-href /sagar-kale/kirana-shop-inventory-ui/master/dist/",
     "test": "ng test",

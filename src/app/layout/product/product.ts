@@ -1,3 +1,5 @@
+import { Customer } from '../customer/customer';
+
 export class Product {
     id: number;
     productName: string;
@@ -7,4 +9,5 @@ export class Product {
     purchasePrice: number;
     salePrice: number;
     desc: string;
+    customer: Customer;
 }
