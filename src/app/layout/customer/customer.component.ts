@@ -27,6 +27,10 @@ export class CustomerComponent implements OnInit, AfterViewInit {
     btnSavingUpdatingTitle = 'Saving Product';
     isNew = true;
     message: string;
+    page = 1;
+    size = 0;
+    maxSize = 0;
+    pageSize = 4;
 
     constructor(
         private fb: FormBuilder,
@@ -52,7 +56,16 @@ export class CustomerComponent implements OnInit, AfterViewInit {
     }
 
     loadDefaults() {
-        this.customerList = this.customerService.getAllCustomers();
+        this.customerService
+            .getAllCustomers(this.page - 1, this.pageSize)
+            .subscribe(res => {
+                this.customerList = res.content.map((c, i) => ({
+                    idd: i + 1,
+                    ...c
+                }));
+                this.size = res.totalElements;
+                this.maxSize = res.totalPages;
+            });
     }
 
     onSubmit() {

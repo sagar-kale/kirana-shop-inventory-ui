@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CustomerRoutingModule } from './customer-routing.module';
-import { TranslateModule } from '@ngx-translate/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CustomerComponent } from './customer.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 import { PageHeaderModule } from 'src/app/shared';
+import { CustomerRoutingModule } from './customer-routing.module';
+import { CustomerComponent } from './customer.component';
 
 @NgModule({
     declarations: [CustomerComponent],
@@ -16,7 +16,7 @@ import { PageHeaderModule } from 'src/app/shared';
         TranslateModule,
         FormsModule,
         ReactiveFormsModule,
-        PageHeaderModule
+        PageHeaderModule,
     ]
 })
 export class CustomerModule {}

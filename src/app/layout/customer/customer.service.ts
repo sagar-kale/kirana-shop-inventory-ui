@@ -18,16 +18,17 @@ export class CustomerService {
         this.globalUrl = environment.apiUrl;
     }
 
-    getAllCustomers(): Observable<any> {
-        return this.http
-            .get<any>(
-                this.globalUrl + this.CUST + '?size=1000&sort=createdAt,desc'
-            )
-            .pipe(
-                map(res => {
-                    return res.content;
-                })
-            );
+    getAllCustomers(page: number = 0, size: number = 1000): Observable<any> {
+        return this.http.get<any>(
+            this.globalUrl +
+                this.CUST +
+                `?page=${page}&size=${size}&sort=createdAt,desc`
+        );
+        // .pipe(
+        //     map(res => {
+        //         return res.content;
+        //     })
+        // );
     }
     saveCustomer(body: Customer): Observable<Customer> {
         return this.http.post<Customer>(this.globalUrl + this.CUST, body);
