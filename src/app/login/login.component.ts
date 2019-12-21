@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
                     return;
                 }
                 localStorage.setItem('isLoggedin', response.entity.logged);
+                localStorage.setItem('loggedInDate', new Date().toDateString());
                 localStorage.setItem(
                     'username',
                     response.entity.loggedInUser.fullName

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
+import { DashboardService } from './components/dashboard.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -10,8 +11,11 @@ import { routerTransition } from '../../router.animations';
 export class DashboardComponent implements OnInit {
     public alerts: Array<any> = [];
     public sliders: Array<any> = [];
+    totalLoss: number;
+    totalProfit = 0;
+    totalCust: number;
 
-    constructor() {
+    constructor(private dashBoardService: DashboardService) {
         this.sliders.push(
             {
                 imagePath: 'assets/images/slider1.jpg',
@@ -52,10 +56,19 @@ export class DashboardComponent implements OnInit {
         );
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.loadStats();
+    }
 
     public closeAlert(alert: any) {
         const index: number = this.alerts.indexOf(alert);
         this.alerts.splice(index, 1);
+    }
+    loadStats(): void {
+        this.dashBoardService.getMisc().subscribe(res => {
+            this.totalCust = res.customerCount;
+            this.totalLoss = res.totalLoss;
+            this.totalProfit = res.totalProfit || 0;
+        });
     }
 }

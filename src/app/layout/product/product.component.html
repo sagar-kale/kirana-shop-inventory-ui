@@ -111,14 +111,14 @@
                           </fieldset>
 
                           <fieldset class="form-group">
-                            <label class="form-control-label">{{ 'Customer' | translate }}</label>
+                            <label class="form-control-label">{{ 'Wholesaler' | translate }}</label>
                             <select class="form-control" formControlName="customer"
                               [ngClass]="{'is-invalid': this.f.customer.invalid && submitted}">
-                              <option *ngFor="let item of customerList | async" value="{{item.id}}">
+                              <option *ngFor="let item of customerList" value="{{item.id}}">
                                 {{item.name}}
                               </option>
                             </select>
-                            <div class="invalid-feedback" *ngIf="this.f.catId.invalid && submitted">
+                            <div class="invalid-feedback" *ngIf="this.f.customer.invalid && submitted">
                               {{errorsObj.catId}}
                             </div>
                           </fieldset>

@@ -1,24 +1,31 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    OnDestroy,
+    OnInit,
+    Output,
+    EventEmitter
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SharedService } from 'src/app/shared/services/shared.service';
+import { Customer, TYPE } from '../customer/customer';
+import { CustomerService } from '../customer/customer.service';
 import { Product } from './product';
 import { ProductService } from './product.service';
-import { Customer } from '../customer/customer';
-import { CustomerService } from '../customer/customer.service';
 
 @Component({
     selector: 'app-product',
     templateUrl: './product.component.html',
     styleUrls: ['./product.component.scss']
 })
-export class ProductComponent implements OnInit, AfterViewInit {
+export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
     measureList: Observable<any>;
     categoryList: Observable<any>;
     productList: Observable<any>;
-    customerList: Observable<Customer[]>;
+    customerList: Customer[];
     isLoading = false;
     productForm: FormGroup;
     errorsMap: Map<string, string>;
@@ -32,6 +39,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
     pTabTitle = 'Purchase Product';
     btnSavingUpdatingTitle = 'Saving Product';
     isNew = true;
+    @Output() pChange = new EventEmitter<boolean>();
 
     constructor(
         private productService: ProductService,
@@ -57,10 +65,17 @@ export class ProductComponent implements OnInit, AfterViewInit {
         this.measureList = this.productService.getAllMeasurements();
         this.categoryList = this.productService.getAllCategories();
         this.productList = this.productService.getAllProduct();
-        this.customerList = this.customerService.getAllCustomers();
+        this.customerService.getAllCustomers().subscribe(res => {
+            this.customerList = res.content.filter(
+                c => c.type === TYPE.WHOLESALER
+            );
+        });
         this.productName$
             .pipe(debounceTime(500), distinctUntilChanged())
             .subscribe(value => this.checkName(value));
+    }
+    ngOnDestroy(): void {
+        this.productName$.complete();
     }
     onSubmit() {
         this.submitted = true;
@@ -96,6 +111,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
                         return;
                     }
                     this.sharedService.displaySuccessMsg(res.msg);
+                    this.pChange.emit(true);
                     this.clearForm();
                 },
                 err => {
@@ -138,7 +154,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
                         'Update Sucesfull',
                         'success'
                     );
-
+                    this.pChange.emit(true);
                     this.clearForm();
                 },
                 err => {
@@ -169,6 +185,7 @@ export class ProductComponent implements OnInit, AfterViewInit {
                 return;
             }
             this.sharedService.buildAlert('Success', res.msg, 'success');
+            this.pChange.emit(true);
             this.retriveAllProduct();
         });
     }

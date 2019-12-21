@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SharedService } from 'src/app/shared/services/shared.service';
-import { Customer } from './customer';
+import { Customer, TYPE } from './customer';
 import { CustomerService } from './customer.service';
 
 @Component({
@@ -31,6 +31,7 @@ export class CustomerComponent implements OnInit, AfterViewInit {
     size = 0;
     maxSize = 0;
     pageSize = 4;
+    types: TYPE;
 
     constructor(
         private fb: FormBuilder,
@@ -44,7 +45,8 @@ export class CustomerComponent implements OnInit, AfterViewInit {
             name: ['', Validators.required],
             email: ['', Validators.required],
             address: ['', Validators.required],
-            phone: ['', [Validators.required, Validators.minLength(10)]]
+            phone: ['', [Validators.required, Validators.minLength(10)]],
+            type: ['', Validators.required]
         });
     }
 
@@ -53,6 +55,9 @@ export class CustomerComponent implements OnInit, AfterViewInit {
             .pipe(debounceTime(500), distinctUntilChanged())
             .subscribe(value => this.checkName(+value));
         this.loadDefaults();
+    }
+    loadEnum() {
+        return Object.keys(TYPE);
     }
 
     loadDefaults() {

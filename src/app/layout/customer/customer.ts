@@ -4,4 +4,9 @@ export class Customer {
     email?: string;
     address?: string;
     phone?: string;
+    type?: string;
+}
+export enum TYPE {
+    CUSTOMER = 'CUSTOMER',
+    WHOLESALER = 'WHOLESALER'
 }

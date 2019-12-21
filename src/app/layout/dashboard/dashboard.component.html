@@ -15,23 +15,23 @@
     </div> -->
     <hr>
     <div class="row">
-        <div class="col-xl-3 col-lg-6">
-            <app-stat [bgClass]="'primary'" [icon]="'fa-user'" [count]="26" [label]="'Total Customers'" ></app-stat>
+        <div class="col-xl-4 col-lg-6">
+        <app-stat [bgClass]="'primary'" [icon]="'fa-user'" [count]="totalCust" [label]="'Customers'" ></app-stat>
         </div>
-        <div class="col-xl-3 col-lg-6">
+        <!-- <div class="col-xl-3 col-lg-6">
             <app-stat [bgClass]="'warning'" [icon]="'fa-tasks'" [count]="12" [label]="'New task!'" ></app-stat>
+        </div> -->
+        <div class="col-xl-4 col-lg-6">
+            <app-stat [bgClass]="'success'" [icon]="'fa-inr'" [count]="totalProfit" [label]="'total_profit' | translate" ></app-stat>
         </div>
-        <div class="col-xl-3 col-lg-6">
-            <app-stat [bgClass]="'success'" [icon]="'fa-inr'" [count]="124" [label]="'total_profit' | translate" ></app-stat>
-        </div>
-        <div class="col-xl-3 col-lg-6">
-            <app-stat [bgClass]="'danger'" [icon]="'fa-support'" [count]="13" [label]="'New Tickets!'"></app-stat>
+        <div class="col-xl-4 col-lg-6">
+            <app-stat [bgClass]="'danger'" [icon]="'fa-inr'" [count]="totalLoss" [label]="'Total Loss' | translate"></app-stat>
         </div>
     </div>
     <hr />
     <!-- <ngb-alert [type]="alert.type" (close)="closeAlert(alert)" *ngFor="let alert of alerts">{{ alert.message }}</ngb-alert>
     <hr /> -->
-    <app-product></app-product>
+    <app-product (pChange)="loadStats()"></app-product>
     <div class="row mb-3">
         <div class="col-lg-8">
             <div class="card card-default">
