@@ -67,7 +67,7 @@ export class ProductComponent implements OnInit, AfterViewInit, OnDestroy {
         this.productList = this.productService.getAllProduct();
         this.customerService.getAllCustomers().subscribe(res => {
             this.customerList = res.content.filter(
-                c => c.type === TYPE.WHOLESALER
+                (c: { type: TYPE }) => c.type === TYPE.WHOLESALER
             );
         });
         this.productName$

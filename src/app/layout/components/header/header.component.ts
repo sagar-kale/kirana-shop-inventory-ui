@@ -29,14 +29,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
         this.languages = [
             { lang: 'English', code: 'en' },
+            { lang: 'Marathi', code: 'mr' },
             { lang: 'French', code: 'fr' },
             { lang: 'Urdu', code: 'ur' },
             { lang: 'Spanish', code: 'es' },
             { lang: 'Italian', code: 'it' },
             { lang: 'Farsi', code: 'fa' },
             { lang: 'German', code: 'de' },
-            { lang: 'Simplified Chinese', code: 'zh-CHS' },
-            { lang: 'Marathi', code: 'mr' }
+            { lang: 'Simplified Chinese', code: 'zh-CHS' }
         ];
         this.username = localStorage.getItem('username');
     }
