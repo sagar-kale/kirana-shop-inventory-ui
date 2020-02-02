@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-root',
@@ -7,10 +8,10 @@ import { Component, OnInit, HostListener } from '@angular/core';
 })
 export class AppComponent implements OnInit {
     isLoginValid = false;
-    constructor() {}
+    constructor( private cookie: CookieService) {}
     @HostListener('window:beforeunload', ['$event'])
     clearLocalStorage(event) {
-        const logInDate = localStorage.getItem('loggedInDate');
+        const logInDate = this.cookie.get('loggedInDate');
         console.log(logInDate);
         const ld = new Date(logInDate);
         const cd = new Date();
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit {
             ld.getMonth() === cd.getMonth() &&
             ld.getDate() === cd.getDate();
         if (!this.isLoginValid) {
-            localStorage.clear();
+            // localStorage.clear();
+            this.cookie.deleteAll();
         }
         console.log(this.isLoginValid);
         event.returnValue = 'dddddd';

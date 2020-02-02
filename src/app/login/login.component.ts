@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { routerTransition } from '../router.animations';
 import { SharedService } from '../shared/services/shared.service';
 import { RegistrationService } from '../signup/registration.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
         public router: Router,
         private loginService: RegistrationService,
         private formBuilder: FormBuilder,
-        private sharedService: SharedService
+        private sharedService: SharedService,
+        private cookieService: CookieService
     ) {
         this.loginForm = this.formBuilder.group({
             email: ['', Validators.required],
@@ -42,12 +44,15 @@ export class LoginComponent implements OnInit {
                     this.loginForm.reset();
                     return;
                 }
-                localStorage.setItem('isLoggedin', response.entity.logged);
-                localStorage.setItem('loggedInDate', new Date().toDateString());
-                localStorage.setItem(
-                    'username',
-                    response.entity.loggedInUser.fullName
-                );
+                // localStorage.setItem('isLoggedin', response.entity.logged);
+                // localStorage.setItem('loggedInDate', new Date().toDateString());
+                // localStorage.setItem(
+                  //  'username',
+                    // response.entity.loggedInUser.fullName
+                // );
+                this.cookieService.set('isLoggedin', response.entity.logged);
+                this.cookieService.set('loggedInDate', new Date().toDateString());
+                this.cookieService.set('username', response.entity.loggedInUser.fullName);
                 this.router.navigate(['/dashboard']);
             },
             err => {

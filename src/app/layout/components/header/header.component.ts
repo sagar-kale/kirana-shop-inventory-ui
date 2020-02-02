@@ -3,6 +3,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
     selector: 'app-header',
@@ -16,7 +17,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     username: string;
     subject: Subject<string> = new Subject();
 
-    constructor(private translate: TranslateService, public router: Router) {
+    constructor(
+        private translate: TranslateService,
+        public router: Router,
+        private cookieService: CookieService
+    ) {
         this.router.events.subscribe(val => {
             if (
                 val instanceof NavigationEnd &&
@@ -38,7 +43,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
             { lang: 'German', code: 'de' },
             { lang: 'Simplified Chinese', code: 'zh-CHS' }
         ];
-        this.username = localStorage.getItem('username');
+        // this.username = localStorage.getItem('username');
+        this.username = this.cookieService.get('username');
     }
 
     ngOnInit() {
@@ -67,12 +73,15 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
 
     onLoggedout() {
-        localStorage.removeItem('isLoggedin');
-        localStorage.removeItem('username');
+        // localStorage.removeItem('isLoggedin');
+        // localStorage.removeItem('username');
+        this.cookieService.delete('isLoggedin');
+        this.cookieService.delete('username');
     }
 
     changeLang(language: string) {
-        sessionStorage.setItem('selectedLang', language);
+        // sessionStorage.setItem('selectedLang', language);
+        this.cookieService.set('selectedLang', language);
         this.translate.use(language);
     }
     onSearch(value: string) {
