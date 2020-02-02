@@ -13,10 +13,12 @@ export class SidebarComponent implements OnInit {
     collapsed: boolean;
     showMenu: string;
     pushRightClass: string;
+    username: string;
 
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
     constructor(private translate: TranslateService, public router: Router, private cookie: CookieService) {
+        this.username = this.cookie.get('username');
         this.router.events.subscribe(val => {
             if (
                 val instanceof NavigationEnd &&
